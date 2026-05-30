@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Login - AgroSmart AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-leaf"></i>
+                <span data-i18n="logo_text">AgroSmart AI</span>
+            </a>
+            <div class="nav-actions">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="lang-en">EN</button>
+                    <button class="lang-btn" id="lang-kn">ಕನ್</button>
+                </div>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="mobile-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page-main">
+        <div class="glass-card auth-card">
+            <h2 class="section-title" data-i18n="login_title">Login to AgroSmart AI</h2>
+            {% if message %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endif %}
+            <form method="POST" class="form-stack">
+                <label class="form-label" data-i18n="login_username">Username</label>
+                <input type="text" name="username" class="form-input" placeholder="admin or farmer" data-i18n-placeholder="login_username" required />
+                <label class="form-label" data-i18n="login_password">Password</label>
+                <input type="password" name="password" class="form-input" placeholder="Enter your password" data-i18n-placeholder="login_password" required />
+                <button type="submit" class="btn-primary"><span data-i18n="login_btn">Login</span></button>
+            </form>
+            <p class="text-muted-block" style="margin-top: 1rem;">
+                <span data-i18n="login_no_account">Don't have an account?</span> <a href="{{ url_for('signup') }}" data-i18n="signup_title">Create one</a>.
+            </p>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

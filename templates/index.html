@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>AgroSmart AI - AI-Powered Agriculture Advisory</title>
+    
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Chart.js for beautiful graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    <div class="cyber-grid-overlay" aria-hidden="true"></div>
+    <div class="agro-bg-leaves" aria-hidden="true">
+        <svg class="leaf leaf1" width="60" height="60" viewBox="0 0 60 60"><path d="M30 10 Q40 30 30 50 Q20 30 30 10 Z" fill="#00ffa3" opacity="0.6"/></svg>
+        <svg class="leaf leaf2" width="40" height="40" viewBox="0 0 40 40"><path d="M20 7 Q28 20 20 33 Q12 20 20 7 Z" fill="#fbbf24" opacity="0.5"/></svg>
+        <svg class="leaf leaf3" width="50" height="50" viewBox="0 0 50 50"><path d="M25 8 Q34 25 25 42 Q16 25 25 8 Z" fill="#00d4ff" opacity="0.45"/></svg>
+    </div>
+    <span class="agro-float-icon" aria-hidden="true">🌱</span>
+    <span class="agro-float-icon" aria-hidden="true">🌾</span>
+    <span class="agro-float-icon" aria-hidden="true">💧</span>
+    <span class="agro-float-icon" aria-hidden="true">🍃</span>
+
+    <!-- Header / Nav -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-leaf"></i>
+                <span data-i18n="logo_text">AgroSmart AI</span>
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link" data-i18n="nav_home">Home</a></li>
+                <li><a href="#features" class="nav-link" data-i18n="nav_features">Features</a></li>
+                <li><a href="#predictor" class="nav-link" data-i18n="nav_predictor">Predictor</a></li>
+                <li><a href="#dashboard" class="nav-link" data-i18n="nav_dashboard">Dashboard</a></li>
+                <li><a href="#about" class="nav-link" data-i18n="nav_about">About</a></li>
+                {% if current_user %}
+                    <li><a href="{{ url_for('profile') }}" class="nav-link" data-i18n="nav_profile">Profile</a></li>
+                    {% if current_user.role == 'admin' %}
+                        <li><a href="{{ url_for('admin_dashboard') }}" class="nav-link" data-i18n="nav_admin">Admin</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}" class="nav-link" data-i18n="nav_logout">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}" class="nav-link" data-i18n="nav_login">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}" class="nav-link" data-i18n="nav_register">Register</a></li>
+                {% endif %}
+            </ul>
+            
+            <div class="nav-actions">
+                <!-- Multilingual Language Toggle -->
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="lang-en">EN</button>
+                    <button class="lang-btn" id="lang-kn">ಕನ್</button>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+                
+                <!-- Mobile Burger Toggle -->
+                <div class="mobile-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-aurora" aria-hidden="true"></div>
+        <div class="hero-mesh"></div>
+        <canvas id="hero-3d-canvas" class="hero-3d-canvas" aria-hidden="true"></canvas>
+        <div class="hero-orb" aria-hidden="true"></div>
+        <div class="container hero-grid">
+            
+            <!-- Left Hero Content -->
+            <div class="hero-content animate-fade-in">
+                <div class="hero-badge">
+                    <i class="fas fa-microchip"></i>
+                    <span data-i18n="hero_badge">AI-Powered Smart Farming</span>
+                </div>
+                <h1 class="hero-title" data-i18n="hero_title">
+                    AI-Based Smart <span>Crop Advisory</span> System
+                </h1>
+                <p class="hero-description" data-i18n="hero_subtitle">
+                    Empowering farmers with state-of-the-art machine learning models to maximize yields, analyze soil health, and get real-time climate recommendations.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#predictor" class="btn-primary">
+                        <span data-i18n="hero_get_started">Get Recommendation</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#dashboard" class="btn-secondary" data-i18n="hero_learn_more">
+                        Explore Dashboard
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right Hero Widget (Climate Dashboard Widget) -->
+            <div class="weather-widget glass-card animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="weather-header">
+                    <div class="weather-title">
+                        <i class="fas fa-cloud-sun"></i>
+                        <span data-i18n="weather_title">Farming Climate</span>
+                    </div>
+                    <div class="weather-search">
+                        <input type="text" id="weather-city-input" placeholder="Enter city..." data-i18n-placeholder="weather_search_placeholder">
+                        <button id="weather-search-btn" aria-label="Search City"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                
+                <div class="weather-info">
+                    <div class="weather-temp-container">
+                        <i class="weather-icon-cloud fas fa-cloud-sun-rain" id="weather-main-icon"></i>
+                        <span class="weather-temp" id="weather-temp">26.5°C</span>
+                    </div>
+                    <div class="weather-details">
+                        <span class="weather-city" id="weather-city-name">Bengaluru</span>
+                        <span class="weather-desc" id="weather-desc">Scattered Clouds</span>
+                    </div>
+                </div>
+                
+                <div class="weather-stats">
+                    <div class="weather-stat-item">
+                        <i class="fas fa-droplet"></i>
+                        <div>
+                            <span data-i18n="weather_humidity">Humidity</span>
+                            <div class="weather-stat-val" id="weather-hum-val">65%</div>
+                        </div>
+                    </div>
+                    <div class="weather-stat-item">
+                        <i class="fas fa-wind"></i>
+                        <div>
+                            <span data-i18n="weather_wind">Wind</span>
+                            <div class="weather-stat-val" id="weather-wind-val">12 km/h</div>
+                        </div>
+                    </div>
+                    <div class="weather-stat-item weather-stat-full">
+                        <i class="fas fa-cloud-showers-water"></i>
+                        <div class="weather-stat-row">
+                            <span data-i18n="weather_rain">Rain Prob.</span>
+                            <span class="weather-stat-val" id="weather-rain-val">10%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge" data-i18n="feat_badge">Key Capabilities</span>
+                <h2 class="section-title" data-i18n="feat_title">Intelligent Farm Management</h2>
+                <p class="section-description" data-i18n="feat_desc">
+                    We bring modern data-driven agriculture tools straight to your field.
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card glass-card">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-card-title" data-i18n="card_ml_title">AI Crop Selection</h3>
+                    <p class="feature-card-desc" data-i18n="card_ml_desc">
+                        Get 95%+ accurate recommendations based on soil NPK levels, moisture, and rainfall parameters using Random Forest models.
+                    </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-card glass-card">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3 class="feature-card-title" data-i18n="card_soil_title">pH Soil Analysis</h3>
+                    <p class="feature-card-desc" data-i18n="card_soil_desc">
+                        Understand your soil type (Acidic, Alkaline, or Neutral) and get targeted remediation strategies immediately.
+                    </p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-card glass-card">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="feature-card-title" data-i18n="card_eco_title">Sustainable Practices</h3>
+                    <p class="feature-card-desc" data-i18n="card_eco_desc">
+                        Access eco-friendly fertilizer suggestions, water-saving irrigation guidelines, and green manure instructions.
+                    </p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-card glass-card">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="feature-card-title" data-i18n="card_chat_title">24/7 Smart Advisor</h3>
+                    <p class="feature-card-desc" data-i18n="card_chat_desc">
+                        Chat with our virtual expert for answers on crop rotation, pest identification, weed management, and local practices.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Predictor & AI Advisory Report Section -->
+    <section class="predictor-section" id="predictor">
+        <div class="container">
+            <div class="predictor-grid">
+                
+                <!-- Input Parameters Card -->
+                <div class="predictor-card glass-card predictor-card-wrap">
+                    <!-- Loading Animation overlay -->
+                    <div class="loading-overlay" id="loading-overlay">
+                        <div class="spinner"></div>
+                        <div class="loading-text" data-i18n="loading_predicting">Analyzing Soil & Running ML Inference...</div>
+                    </div>
+                    
+                    <h2 class="section-title predictor-form-title" data-i18n="form_title">Input Soil Parameters</h2>
+                    <p class="text-muted-block" style="font-size:0.9rem;" data-i18n="form_desc">
+                        Fill in the parameters below. You can find these values from a standard soil health card.
+                    </p>
+                    
+                    <form class="form-grid" id="crop-predictor-form">
+                        <!-- Nitrogen -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span data-i18n="lbl_nitrogen">Nitrogen (N)</span>
+                                <span class="range-hint" data-i18n="hint_nitrogen">Optimal: 0 - 150 mg/kg</span>
+                            </label>
+                            <div class="input-container input-with-unit">
+                                <i class="fas fa-n"></i>
+                                <input type="number" step="1" min="0" max="250" class="form-input" id="input-n" placeholder="90" required>
+                                <span class="input-unit">mg/kg</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Phosphorus -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span data-i18n="lbl_phosphorus">Phosphorus (P)</span>
+                                <span class="range-hint" data-i18n="hint_phosphorus">Optimal: 5 - 145 mg/kg</span>
+                            </label>
+                            <div class="input-container input-with-unit">
+                                <i class="fas fa-p"></i>
+                                <input type="number" step="1" min="0" max="250" class="form-input" id="input-p" placeholder="42" required>
+                                <span class="input-unit">mg/kg</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Potassium -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span data-i18n="lbl_potassium">Potassium (K)</span>
+                                <span class="range-hint" data-i18n="hint_potassium">Optimal: 5 - 200 mg/kg</span>
+                            </label>
+                            <div class="input-container input-with-unit">
+                                <i class="fas fa-k"></i>
+                                <input type="number" step="1" min="0" max="300" class="form-input" id="input-k" placeholder="43" required>
+                                <span class="input-unit">mg/kg</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Soil pH -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span data-i18n="lbl_ph">Soil pH</span>
+                                <span class="range-hint" data-i18n="hint_ph">Scale: 0.0 - 14.0</span>
+                            </label>
+                            <div class="input-container input-with-unit">
+                                <i class="fas fa-gauge"></i>
+                                <input type="number" step="0.1" min="0.0" max="14.0" class="form-input" id="input-ph" placeholder="6.5" required>
+                                <span class="input-unit">pH</span>
+                            </div>
+                            <div class="ph-visualizer">
+                                <div class="ph-pointer" id="ph-pointer"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Temperature -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span data-i18n="lbl_temp">Temperature (°C)</span>
+                                <span class="range-hint" data-i18n="hint_temp">Scale: 10 - 50 °C</span>
+                            </label>
+                            <div class="input-container input-with-unit">
+                                <i class="fas fa-temperature-half"></i>
+                                <input type="number" step="0.1" min="0.0" max="60.0" class="form-input" id="input-temp" placeholder="22.5" required>
+                                <span class="input-unit">°C</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Humidity -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span data-i18n="lbl_humidity">Humidity (%)</span>
+                                <span class="range-hint" data-i18n="hint_humidity">Scale: 15 - 100 %</span>
+                            </label>
+                            <div class="input-container input-with-unit">
+                                <i class="fas fa-droplet"></i>
+                                <input type="number" step="0.1" min="0.0" max="100.0" class="form-input" id="input-humidity" placeholder="82.0" required>
+                                <span class="input-unit">%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Rainfall -->
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <span data-i18n="lbl_rainfall">Rainfall (mm)</span>
+                                <span class="range-hint" data-i18n="hint_rainfall">Scale: 20 - 350 mm</span>
+                            </label>
+                            <div class="input-container input-with-unit">
+                                <i class="fas fa-cloud-showers-water"></i>
+                                <input type="number" step="0.1" min="0.0" max="500.0" class="form-input" id="input-rainfall" placeholder="202.9" required>
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn-primary btn-submit-predict">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            <span data-i18n="btn_predict">Predict Suitable Crop</span>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Recommendation Output Card (hidden until Predict succeeds) -->
+                <div class="result-card glass-card" id="result-card" aria-hidden="true" hidden>
+                    <div class="result-header">
+                        <div class="result-glow-box">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3 style="font-size: 1.5rem;" data-i18n="res_card_title">AgroSmart Recommendation</h3>
+                        <p style="color:var(--text-secondary); font-size:0.85rem;" data-i18n="res_card_subtitle">Your AI Advisory Report is Ready</p>
+                    </div>
+                    
+                    <div style="display:flex; flex-direction:column; align-items:center; gap: 0.25rem;">
+                        <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); letter-spacing:1px;" data-i18n="lbl_recommended">RECOMMENDED CROP</span>
+                        <div class="result-crop-name" id="res-crop-name">—</div>
+                        <div class="result-soil-badge neutral" id="res-soil-badge">—</div>
+                    </div>
+                    
+                    <div class="advice-container">
+                        <!-- Fertilizer -->
+                        <div class="advice-item">
+                            <div class="advice-icon"><i class="fas fa-circle-nodes"></i></div>
+                            <div class="advice-details">
+                                <span class="advice-label" data-i18n="lbl_fertilizer_tips">Fertilizer Management</span>
+                                <span class="advice-text" id="res-fertilizer"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Irrigation -->
+                        <div class="advice-item">
+                            <div class="advice-icon"><i class="fas fa-faucet-drip"></i></div>
+                            <div class="advice-details">
+                                <span class="advice-label" data-i18n="lbl_irrigation_tips">Water & Irrigation</span>
+                                <span class="advice-text" id="res-irrigation"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Soil improvement -->
+                        <div class="advice-item">
+                            <div class="advice-icon"><i class="fas fa-mountain-sun"></i></div>
+                            <div class="advice-details">
+                                <span class="advice-label" data-i18n="lbl_soil_tips">Soil Enhancement</span>
+                                <span class="advice-text" id="res-soil-improve"></span>
+                            </div>
+                        </div>
+
+                        <!-- Ideal Weather -->
+                        <div class="advice-item">
+                            <div class="advice-icon" style="color:var(--accent);"><i class="fas fa-cloud-sun"></i></div>
+                            <div class="advice-details">
+                                <span class="advice-label" data-i18n="lbl_ideal_weather_tips">Ideal Climate Conditions</span>
+                                <span class="advice-text" id="res-ideal-weather"></span>
+                            </div>
+                        </div>
+
+                        <!-- Estimated Income -->
+                        <div class="advice-item">
+                            <div class="advice-icon" style="color:#10b981;"><i class="fas fa-wallet"></i></div>
+                            <div class="advice-details">
+                                <span class="advice-label" data-i18n="lbl_income_tips">Market Value & Income</span>
+                                <span class="advice-text" id="res-estimated-income"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-actions" style="margin-top: 1.25rem; display:flex; gap:1rem; flex-wrap:wrap;">
+                        <button class="btn-secondary" id="print-report-btn" style="display:none;" data-i18n="print_report">Print Report</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Analytics Section -->
+    <section class="dashboard-section" id="dashboard">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge" data-i18n="dash_badge">Real-Time Tracking</span>
+                <h2 class="section-title" data-i18n="dash_title">Soil & Prediction Dashboard</h2>
+            </div>
+            
+            <!-- Global Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon"><i class="fas fa-database"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="val-total">0</span>
+                        <span class="stat-lbl" data-i18n="stat_total">Total Predictions</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-icon"><i class="fas fa-flask-vial"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="val-ph">0.0</span>
+                        <span class="stat-lbl" data-i18n="stat_avg_ph">Average pH</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="color:var(--acidic-color); background:rgba(239,68,68,0.15);"><i class="fas fa-triangle-exclamation"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="val-acidic">0%</span>
+                        <span class="stat-lbl" data-i18n="stat_acidic">Acidic Samples</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="color:var(--primary);"><i class="fas fa-circle-check"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-val" id="val-ideal">0%</span>
+                        <span class="stat-lbl" data-i18n="stat_ideal">Neutral Samples</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-grid">
+                <!-- Left Chart Canvas -->
+                <div class="chart-card glass-card">
+                    <div class="chart-header">
+                        <span class="chart-title" data-i18n="chart_distribution">Predicted Crop Distribution</span>
+                        <i class="fas fa-chart-simple" style="color:var(--primary);"></i>
+                    </div>
+                    <div style="flex-grow:1; position:relative; min-height: 280px;">
+                        <canvas id="prediction-chart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Right History Logs list -->
+                <div class="chart-card glass-card">
+                    <div class="chart-header">
+                        <span class="chart-title" data-i18n="chart_recent">Prediction History Logs</span>
+                        <i class="fas fa-clock-rotate-left" style="color:var(--primary);"></i>
+                    </div>
+                    <div class="history-list" id="history-list-container">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container about-grid">
+            <div class="about-img-container">
+                <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=600&auto=format&fit=crop" alt="Smart agriculture field" class="about-img">
+                <div class="about-img-overlay">
+                    <div class="about-floating-card glass-card" style="width: 80%;">
+                        <div style="display:flex; align-items:center; gap:0.5rem; color:var(--accent); font-weight:800; font-size:0.85rem;">
+                            <i class="fas fa-ribbon"></i>
+                            <span data-i18n="about_badge_organic">100% Sustainable Suggestions</span>
+                        </div>
+                        <h4 style="margin-top:0.25rem;">Machine Learning for Crop Rotation</h4>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-circle-question"></i>
+                    <span data-i18n="about_badge">How it works</span>
+                </div>
+                <h2 class="section-title" data-i18n="about_title">Bridging the Gap Between AI & Agriculture</h2>
+                <p style="color:var(--text-secondary); line-height:1.7;" data-i18n="about_desc_1">
+                    AgroSmart AI utilizes machine learning algorithms (Random Forest Classifier) trained on extensive agronomic parameters to guide crop planning choices.
+                </p>
+                <p style="color:var(--text-secondary); line-height:1.7;" data-i18n="about_desc_2">
+                    By examining critical physical and chemical metrics—such as Nitrogen, Phosphorus, Potassium, soil pH, and local weather indicators—our models output the highest probability matching crops, eliminating guesswork.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact section removed as requested -->
+
+    <!-- Footer Section -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <i class="fas fa-leaf"></i>
+                        <span data-i18n="logo_text">AgroSmart AI</span>
+                    </a>
+                    <p class="footer-quote">
+                        "The ultimate goal of farming is not the growing of crops, but the cultivation and perfection of human beings." — Masanobu Fukuoka
+                    </p>
+                    <p class="footer-brand-desc" style="font-size:0.8rem; color:var(--text-secondary);" data-i18n="footer_brand_desc">
+                        AgroSmart AI is a futuristic smart agricultural platform dedicated to assisting farmers with localized insights and decision-making.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title" data-i18n="footer_links_title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" data-i18n="nav_home">Home</a></li>
+                        <li><a href="#features" data-i18n="nav_features">Features</a></li>
+                        <li><a href="#predictor" data-i18n="nav_predictor">Predictor</a></li>
+                        <li><a href="#dashboard" data-i18n="nav_dashboard">Dashboard</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title" data-i18n="contact_badge">Contact</h4>
+                    <div class="footer-contact-list">
+                        <div class="footer-contact-item">
+                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                            <a href="mailto:support@agrosmart.ai" class="footer-contact-text">support@agrosmart.ai</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fas fa-location-dot" aria-hidden="true"></i>
+                            <span class="footer-contact-text">Place: GM University Davanagere, Karnataka</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fas fa-headset" aria-hidden="true"></i>
+                            <span class="footer-contact-text">Emergency Toll-Free Helpline: 1800-180-1551</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <span>&copy; 2026 AgroSmart AI. <span data-i18n="footer_rights">All Rights Reserved.</span></span>
+                <span>Designed for Modern Indian Farmers & Agriculture presentation</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Chatbot Assistant -->
+    <div class="chat-container">
+        <!-- Chat Bubble toggle -->
+        <button type="button" class="chat-bubble" id="chat-bubble" aria-label="Open Chatbot Assistant" aria-expanded="false" aria-controls="chat-window">
+            <i class="fas fa-comments"></i>
+        </button>
+        
+        <!-- Expanded Chat Window (hidden until bubble is clicked) -->
+        <div class="chat-window glass-card" id="chat-window" aria-hidden="true">
+            <div class="chat-header-bar">
+                <div class="chat-header-title">
+                    <i class="fas fa-robot"></i>
+                    <span data-i18n="chat_title">Farmer Advisor AI</span>
+                </div>
+                <div class="chat-close-btn" id="chat-close"><i class="fas fa-xmark"></i></div>
+            </div>
+            
+            <!-- Messages Container -->
+            <div class="chat-messages" id="chat-messages">
+                <div class="message-bubble bot" data-i18n="chat_welcome">
+                    Hello! I am your AgroSmart AI Assistant. How can I help you with your crops, soil pH, or fertilizers today?
+                </div>
+            </div>
+            
+            <!-- Quick Replies -->
+            <div class="chat-quick-replies">
+                <span class="quick-reply-tag" data-query="ph" data-i18n="qr_ph">Soil pH</span>
+                <span class="quick-reply-tag" data-query="fertilizer" data-i18n="qr_fertilizer">Fertilizers</span>
+                <span class="quick-reply-tag" data-query="pest" data-i18n="qr_pest">Pests Control</span>
+                <span class="quick-reply-tag" data-query="water" data-i18n="qr_water">Drip Irrigation</span>
+            </div>
+            
+            <!-- Input Message Area -->
+            <div class="chat-input-bar">
+                <input type="text" id="chat-input" placeholder="Type a farming question..." data-i18n-placeholder="chat_placeholder">
+                <button class="chat-send-btn" id="chat-send-btn" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/hero-3d.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

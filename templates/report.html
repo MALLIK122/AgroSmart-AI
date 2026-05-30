@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Prediction Report - AgroSmart AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="no-print">
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-leaf"></i>
+                <span data-i18n="logo_text">AgroSmart AI</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('index') }}" class="nav-link" data-i18n="nav_home">Home</a></li>
+                <li><a href="{{ url_for('index') }}#dashboard" class="nav-link" data-i18n="nav_dashboard">Dashboard</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link" data-i18n="nav_profile">Profile</a></li>
+                <li><a href="{{ url_for('logout') }}" class="nav-link" data-i18n="nav_logout">Logout</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="lang-en">EN</button>
+                    <button class="lang-btn" id="lang-kn">ಕನ್</button>
+                </div>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="mobile-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container page-main report-page">
+        <div class="glass-card page-card">
+            <div class="report-header-row">
+                <div>
+                    <h1 class="section-title" style="margin-bottom:0.5rem;" data-i18n="report_title">AgroSmart AI Prediction Report</h1>
+                    <p class="text-muted-block" style="margin:0;"><span data-i18n="report_generated_for">Generated for</span> <strong>{{ user.username }}</strong></p>
+                </div>
+                <div class="no-print btn-row" style="margin-top:0;">
+                    <button onclick="window.print();" class="btn-primary" data-i18n="print_report">Print Report</button>
+                    <a href="{{ url_for('profile') }}" class="btn-secondary" data-i18n="back_to_profile">Back to Profile</a>
+                </div>
+            </div>
+
+            <section class="report-section">
+                <h2 class="section-title" data-i18n="report_section_summary">Prediction Summary</h2>
+                <div class="report-grid">
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_recommended">Recommended Crop</strong>
+                        <p class="crop-name-translate" data-crop="{{ record.recommended_crop }}">{{ record.recommended_crop }}</p>
+                    </div>
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_soil_class">Soil Classification</strong>
+                        <p class="soil-type-translate" data-en="{{ record.soil_type_localized.en }}" data-kn="{{ record.soil_type_localized.kn }}">{{ record.soil_type_localized.en }}</p>
+                    </div>
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_timestamp">Timestamp</strong>
+                        <p>{{ record.timestamp }}</p>
+                    </div>
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_submitted_by">Submitted By</strong>
+                        <p>{{ record.username }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="report-section">
+                <h2 class="section-title" data-i18n="report_section_parameters">Soil Parameters</h2>
+                <div class="report-grid">
+                    <div class="report-card glass-card"><strong>N</strong><p>{{ record.N }}</p></div>
+                    <div class="report-card glass-card"><strong>P</strong><p>{{ record.P }}</p></div>
+                    <div class="report-card glass-card"><strong>K</strong><p>{{ record.K }}</p></div>
+                    <div class="report-card glass-card"><strong data-i18n="report_label_temperature">Temperature</strong><p>{{ record.temperature }} °C</p></div>
+                    <div class="report-card glass-card"><strong data-i18n="report_label_humidity">Humidity</strong><p>{{ record.humidity }} %</p></div>
+                    <div class="report-card glass-card"><strong data-i18n="report_label_ph">pH</strong><p>{{ record.ph }}</p></div>
+                    <div class="report-card glass-card"><strong data-i18n="report_label_rainfall">Rainfall</strong><p>{{ record.rainfall }} mm</p></div>
+                </div>
+            </section>
+
+            <section class="report-section">
+                <h2 class="section-title" data-i18n="report_section_advice">Agro Advice</h2>
+                <div class="report-advice-stack">
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_fertilizer">Fertilizer</strong>
+                        <p class="advice-translate" data-en="{{ record.advice.fertilizer.en }}" data-kn="{{ record.advice.fertilizer.kn }}">{{ record.advice.fertilizer.en }}</p>
+                    </div>
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_irrigation">Irrigation</strong>
+                        <p class="advice-translate" data-en="{{ record.advice.irrigation.en }}" data-kn="{{ record.advice.irrigation.kn }}">{{ record.advice.irrigation.en }}</p>
+                    </div>
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_soil_care">Soil Care</strong>
+                        <p class="advice-translate" data-en="{{ record.advice.soil_improvement.en }}" data-kn="{{ record.advice.soil_improvement.kn }}">{{ record.advice.soil_improvement.en }}</p>
+                    </div>
+                    <div class="report-card glass-card">
+                        <strong data-i18n="report_label_ideal_weather">Ideal Climate</strong>
+                        <p class="advice-translate" data-en="{{ record.advice.ideal_weather.en }}" data-kn="{{ record.advice.ideal_weather.kn }}">{{ record.advice.ideal_weather.en }}</p>
+                    </div>
+                    <div class="report-card glass-card" style="border-left: 4px solid #10b981;">
+                        <strong data-i18n="report_label_estimated_income">Market Value & Income Potential</strong>
+                        <p class="advice-translate" data-en="{{ record.advice.estimated_income.en }}" data-kn="{{ record.advice.estimated_income.kn }}">{{ record.advice.estimated_income.en }}</p>
+                    </div>
+                    
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+    <script src="{{ url_for('static', filename='js/crop_3d.js') }}"></script>
+</body>
+</html>

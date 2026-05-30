@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Admin Panel - AgroSmart AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-leaf"></i>
+                <span data-i18n="logo_text">AgroSmart AI</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('index') }}" class="nav-link" data-i18n="nav_home">Home</a></li>
+                <li><a href="{{ url_for('index') }}#dashboard" class="nav-link" data-i18n="nav_dashboard">Dashboard</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link" data-i18n="nav_profile">Profile</a></li>
+                <li><a href="{{ url_for('logout') }}" class="nav-link" data-i18n="nav_logout">Logout</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="lang-en">EN</button>
+                    <button class="lang-btn" id="lang-kn">ಕನ್</button>
+                </div>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="mobile-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page-main">
+        <div class="glass-card page-card">
+            <h2 class="section-title" data-i18n="admin_panel_title">Admin Control Panel</h2>
+            {% if message %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            <p class="text-muted-block">
+                <span data-i18n="admin_model_loaded">Model loaded:</span> <strong>{{ 'Yes' if model_loaded else 'No' }}</strong><br />
+                <span data-i18n="admin_upload_hint">Use the controls below to reload the model, upload new files, or add a training dataset.</span>
+            </p>
+
+            <form method="POST" action="{{ url_for('admin_dashboard') }}" class="btn-row">
+                <input type="hidden" name="action" value="reload_model" />
+                <button type="submit" class="btn-primary" data-i18n="admin_reload_model">Reload Model</button>
+            </form>
+
+            <div class="page-section">
+                <h3 class="section-title subsection-title" data-i18n="admin_upload_model">Upload Model or Dataset</h3>
+                <form method="POST" action="{{ url_for('admin_dashboard') }}" enctype="multipart/form-data" class="form-stack" style="margin-top:1rem;">
+                    <label class="form-label" data-i18n="admin_label_model_file">Crop Model File</label>
+                    <input type="file" name="crop_model" accept=".pkl" />
+                    <label class="form-label" data-i18n="admin_label_classes_file">Label Classes File</label>
+                    <input type="file" name="label_classes" accept=".pkl" />
+                    <label class="form-label" data-i18n="admin_label_dataset_file">Training Dataset (CSV)</label>
+                    <input type="file" name="dataset_file" accept=".csv" />
+                    <input type="hidden" name="action" value="upload_files" />
+                    <button type="submit" class="btn-secondary" data-i18n="admin_btn_upload">Upload Files</button>
+                </form>
+            </div>
+
+            <div class="page-section">
+                <h3 class="section-title subsection-title" data-i18n="admin_section_training">Training Pipeline</h3>
+                <p class="text-muted-block" data-i18n="admin_training_desc">To retrain or update the model, run the training script locally and upload the generated files here.</p>
+                <pre class="code-block">python train_model.py</pre>
+            </div>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

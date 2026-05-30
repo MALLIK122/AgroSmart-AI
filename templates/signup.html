@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Register - AgroSmart AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-leaf"></i>
+                <span data-i18n="logo_text">AgroSmart AI</span>
+            </a>
+            <div class="nav-actions">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="lang-en">EN</button>
+                    <button class="lang-btn" id="lang-kn">ಕನ್</button>
+                </div>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="mobile-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page-main">
+        <div class="glass-card auth-card">
+            <h2 class="section-title" data-i18n="signup_title">Create a Farmer Profile</h2>
+            {% if message %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endif %}
+            <form method="POST" class="form-stack">
+                <label class="form-label" data-i18n="signup_username">Username</label>
+                <input type="text" name="username" class="form-input" placeholder="Choose a username" data-i18n-placeholder="signup_username" required />
+                <label class="form-label" data-i18n="signup_email">Email</label>
+                <input type="email" name="email" class="form-input" placeholder="you@example.com" data-i18n-placeholder="signup_email" required />
+                <label class="form-label" data-i18n="signup_password">Password</label>
+                <input type="password" name="password" class="form-input" placeholder="Choose a password" data-i18n-placeholder="signup_password" required />
+                <button type="submit" class="btn-primary"><span data-i18n="signup_btn">Register</span></button>
+            </form>
+            <p class="text-muted-block" style="margin-top: 1rem;">
+                <span data-i18n="signup_have_account">Already registered?</span> <a href="{{ url_for('login') }}" data-i18n="login_title">Login here</a>.
+            </p>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

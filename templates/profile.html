@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>My Profile - AgroSmart AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-leaf"></i>
+                <span data-i18n="logo_text">AgroSmart AI</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('index') }}" class="nav-link" data-i18n="nav_home">Home</a></li>
+                <li><a href="{{ url_for('index') }}#dashboard" class="nav-link" data-i18n="nav_dashboard">Dashboard</a></li>
+                <li><a href="{{ url_for('profile') }}" class="nav-link" data-i18n="nav_profile">Profile</a></li>
+                <li><a href="{{ url_for('logout') }}" class="nav-link" data-i18n="nav_logout">Logout</a></li>
+                {% if current_user.role == 'admin' %}
+                    <li><a href="{{ url_for('admin_dashboard') }}" class="nav-link" data-i18n="nav_admin">Admin</a></li>
+                {% endif %}
+            </ul>
+            <div class="nav-actions">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" id="lang-en">EN</button>
+                    <button class="lang-btn" id="lang-kn">ಕನ್</button>
+                </div>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="mobile-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page-main">
+        <div class="glass-card page-card">
+            <h2 class="section-title" data-i18n="profile_title">Your Farmer Profile</h2>
+            <p class="text-muted-block">
+                <span data-i18n="profile_username_label">Username:</span> <strong>{{ user.username }}</strong><br />
+                <span data-i18n="profile_role_label">Role:</span> <strong>{{ user.role }}</strong><br />
+                <span data-i18n="profile_email_label">Email:</span> <strong>{{ user.email or 'N/A' }}</strong>
+            </p>
+
+            <div class="btn-row">
+                <a class="btn-primary" href="{{ url_for('export_history', fmt='csv') }}" data-i18n="export_csv">Download CSV</a>
+                <a class="btn-secondary" href="{{ url_for('export_history', fmt='xlsx') }}" data-i18n="export_xlsx">Download Excel</a>
+            </div>
+        </div>
+
+        <div class="glass-card page-card">
+            <h3 class="section-title subsection-title" data-i18n="profile_history_title">Your Prediction History</h3>
+            {% if history %}
+                <div class="history-list" style="margin-top: 1rem;">
+                    {% for item in history %}
+                        <div class="history-item">
+                            <div class="history-item-row">
+                                <div>
+                                    <div><strong class="crop-name-translate" data-crop="{{ item.recommended_crop }}">{{ item.recommended_crop }}</strong></div>
+                                    <div class="text-muted-block" style="font-size:0.9rem; margin-top:0.25rem;">pH: {{ item.ph }} • Temp: {{ item.temperature }}°C • Rain: {{ item.rainfall }} mm</div>
+                                </div>
+                                <div class="btn-row" style="margin-top:0;">
+                                    <a class="btn-secondary" href="{{ url_for('report', record_id=item._id) }}" target="_blank" data-i18n="btn_report">Report</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: var(--text-secondary);" data-i18n="no_history_msg">No prediction history available yet. Run a prediction to store your history.</p>
+            {% endif %}
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

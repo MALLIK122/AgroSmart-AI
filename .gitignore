@@ -1,0 +1,11 @@
+.env
+.venv/
+venv/
+__pycache__/
+api/
+*.pyc
+.pytest_cache/
+.vercel/
+*.log
+.DS_Store
+.cursor/
