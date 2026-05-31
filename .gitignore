@@ -9,3 +9,4 @@ api/
 *.log
 .DS_Store
 .cursor/
+data/
