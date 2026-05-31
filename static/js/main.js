@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nav_register: "Register",
             hero_badge: "AI-Powered Smart Farming",
             hero_title: "AI-Based Smart <span>Crop Advisory</span> System",
-            hero_subtitle: "Empowering farmers with state-of-the-art machine learning models to maximize yields, analyze soil health, and get real-time climate recommendations.",
+            hero_subtitle: "Empowering farmers with state-of-the-art machine learning models to maximize yields, analyze soil health, and get fast crop predictions from soil NPK and pH values.",
             hero_get_started: "Get Recommendation",
             hero_learn_more: "Explore Dashboard",
             weather_title: "Farming Climate",
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feat_title: "Intelligent Farm Management",
             feat_desc: "We bring modern data-driven agriculture tools straight to your field.",
             card_ml_title: "AI Crop Selection",
-            card_ml_desc: "Get 95%+ accurate recommendations based on soil NPK levels, moisture, and rainfall parameters using Random Forest models.",
+            card_ml_desc: "Get 95%+ accurate predictions based on soil NPK and pH values using Random Forest models.",
             card_soil_title: "pH Soil Analysis",
             card_soil_desc: "Understand your soil type (Acidic, Alkaline, or Neutral) and get targeted remediation strategies immediately.",
             card_eco_title: "Sustainable Practices",
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nav_register: "ನೋಂದಣಿ",
             hero_badge: "AI ಆಧಾರಿತ ಸ್ಮಾರ್ಟ್ ಕೃಷಿ",
             hero_title: "AI-ಆಧಾರಿತ <span>ಸ್ಮಾರ್ಟ್ ಬೆಳೆ</span> ಸಲಹಾ ವ್ಯವಸ್ಥೆ",
-            hero_subtitle: "ಇಳುವರಿಯನ್ನು ಗರಿಷ್ಠಗೊಳಿಸಲು, ಮಣ್ಣಿನ ಆರೋಗ್ಯವನ್ನು ವಿಶ್ಲೇಷಿಸಲು ಮತ್ತು ನೈಜ-ಸಮಯದ ಹವಾಮಾನ ಸಲಹೆಗಳನ್ನು ಪಡೆಯಲು ರೈತರಿಗೆ ಆಧುನಿಕ ಯಂತ್ರ ಕಲಿಕೆ ಮಾದರಿಗಳ ಮೂಲಕ ಸಹಾಯ ಮಾಡುವುದು.",
+            hero_subtitle: "ಇಳುವರಿಯನ್ನು ಗರಿಷ್ಠಗೊಳಿಸಲು, ಮಣ್ಣಿನ ಆರೋಗ್ಯವನ್ನು ವಿಶ್ಲೇಷಿಸಲು ಮತ್ತು ಮಣ್ಣು NPK ಮತ್ತು pH ಮೌಲ್ಯಗಳಿಂದ ವೇಗವಾಗಿ ಬೆಳೆ ಮುನ್ಸೂಚನೆಗಳನ್ನು ಪಡೆಯಲು ರೈತರಿಗೆ ಸಹಾಯ ಮಾಡುವುದು.",
             hero_get_started: "ಬೆಳೆ ಶಿಫಾರಸು ಪಡೆಯಿರಿ",
             hero_learn_more: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ವೀಕ್ಷಿಸಿ",
             weather_title: "ಕೃಷಿ ಹವಾಮಾನ",
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feat_title: "ಬುದ್ಧಿವಂತ ಕೃಷಿ ನಿರ್ವಹಣೆ",
             feat_desc: "ನಾವು ಆಧುನಿಕ ಡೇಟಾ ಆಧಾರಿತ ಕೃಷಿ ಪರಿಕರಗಳನ್ನು ನೇರವಾಗಿ ನಿಮ್ಮ ಹೊಲಕ್ಕೆ ತರುತ್ತೇವೆ.",
             card_ml_title: "AI ಬೆಳೆ ಆಯ್ಕೆ",
-            card_ml_desc: "ರಾಂಡಮ್ ಫಾರೆಸ್ಟ್ ಮಾದರಿಗಳನ್ನು ಬಳಸಿಕೊಂಡು ಮಣ್ಣಿನ NPK ಮಟ್ಟಗಳು ಮತ್ತು ಮಳೆಯ ಆಧಾರದ ಮೇಲೆ ಶೇ. 95 ಕ್ಕೂ ಹೆಚ್ಚು ನಿಖರವಾದ ಬೆಳೆ ಶಿಫಾರಸು ಪಡೆಯಿರಿ.",
+            card_ml_desc: "ರಾಂಡಮ್ ಫಾರೆಸ್ಟ್ ಮಾದರಿಗಳನ್ನು ಬಳಸಿಕೊಂಡು ಮಣ್ಣು NPK ಮತ್ತು pH ಮೌಲ್ಯಗಳ ಆಧಾರದ ಮೇಲೆ ಶೇ. 95 ಕ್ಕೂ ಹೆಚ್ಚು ನಿಖರವಾದ ಮುನ್ಸೂಚನೆಗಳನ್ನು ಪಡೆಯಿರಿ.",
             card_soil_title: "ಪಿಎಚ್ ಮಣ್ಣಿನ ವಿಶ್ಲೇಷಣೆ",
             card_soil_desc: "ನಿಮ್ಮ ಮಣ್ಣಿನ ಪ್ರಕಾರವನ್ನು (ಆಮ್ಲೀಯ, ಕ್ಷಾರೀಯ ಅಥವಾ ತಟಸ್ಥ) ಅರ್ಥಮಾಡಿಕೊಳ್ಳಿ ಮತ್ತು ತಕ್ಷಣ ಪರಿಹಾರ ಕ್ರಮಗಳನ್ನು ಕಂಡುಕೊಳ್ಳಿ.",
             card_eco_title: "ಸುಸ್ಥಿರ ಪದ್ಧತಿಗಳು",
@@ -637,19 +637,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const n = parseFloat(document.getElementById('input-n').value);
         const p = parseFloat(document.getElementById('input-p').value);
         const k = parseFloat(document.getElementById('input-k').value);
-        const temp = parseFloat(document.getElementById('input-temp').value);
-        const humidity = parseFloat(document.getElementById('input-humidity').value);
         const ph = parseFloat(phInput.value);
-        const rainfall = parseFloat(document.getElementById('input-rainfall').value);
+
+        // Use stable defaults for hidden climate values
+        const temp = 25.0;
+        const humidity = 60.0;
+        const rainfall = 100.0;
 
         // Validation
         if (isNaN(n) || n < 0 || n > 250 ||
             isNaN(p) || p < 0 || p > 250 ||
             isNaN(k) || k < 0 || k > 300 ||
-            isNaN(temp) || temp < 0 || temp > 60 ||
-            isNaN(humidity) || humidity < 0 || humidity > 100 ||
-            isNaN(ph) || ph < 0 || ph > 14 ||
-            isNaN(rainfall) || rainfall < 0 || rainfall > 500) {
+            isNaN(ph) || ph < 0 || ph > 14) {
             
             alert(translations[currentLang]['validation_err']);
             return;

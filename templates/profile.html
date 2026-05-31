@@ -62,7 +62,7 @@
                             <div class="history-item-row">
                                 <div>
                                     <div><strong class="crop-name-translate" data-crop="{{ item.recommended_crop }}">{{ item.recommended_crop }}</strong></div>
-                                    <div class="text-muted-block" style="font-size:0.9rem; margin-top:0.25rem;">pH: {{ item.ph }} • Temp: {{ item.temperature }}°C • Rain: {{ item.rainfall }} mm</div>
+                                    <div class="text-muted-block" style="font-size:0.9rem; margin-top:0.25rem;">pH: {{ item.ph }}</div>
                                 </div>
                                 <div class="btn-row" style="margin-top:0;">
                                     <a class="btn-secondary" href="{{ url_for('report', record_id=item._id) }}" target="_blank" data-i18n="btn_report">Report</a>

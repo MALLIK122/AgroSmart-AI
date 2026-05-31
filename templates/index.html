@@ -179,7 +179,7 @@
                     </div>
                     <h3 class="feature-card-title" data-i18n="card_ml_title">AI Crop Selection</h3>
                     <p class="feature-card-desc" data-i18n="card_ml_desc">
-                        Get 95%+ accurate recommendations based on soil NPK levels, moisture, and rainfall parameters using Random Forest models.
+                        Get 95%+ accurate predictions based on soil NPK and pH values using Random Forest models.
                     </p>
                 </div>
                 <!-- Feature 2 -->
@@ -290,46 +290,7 @@
                             </div>
                         </div>
                         
-                        <!-- Temperature -->
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span data-i18n="lbl_temp">Temperature (°C)</span>
-                                <span class="range-hint" data-i18n="hint_temp">Scale: 10 - 50 °C</span>
-                            </label>
-                            <div class="input-container input-with-unit">
-                                <i class="fas fa-temperature-half"></i>
-                                <input type="number" step="0.1" min="0.0" max="60.0" class="form-input" id="input-temp" placeholder="22.5" required>
-                                <span class="input-unit">°C</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Humidity -->
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span data-i18n="lbl_humidity">Humidity (%)</span>
-                                <span class="range-hint" data-i18n="hint_humidity">Scale: 15 - 100 %</span>
-                            </label>
-                            <div class="input-container input-with-unit">
-                                <i class="fas fa-droplet"></i>
-                                <input type="number" step="0.1" min="0.0" max="100.0" class="form-input" id="input-humidity" placeholder="82.0" required>
-                                <span class="input-unit">%</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Rainfall -->
-                        <div class="form-group full-width">
-                            <label class="form-label">
-                                <span data-i18n="lbl_rainfall">Rainfall (mm)</span>
-                                <span class="range-hint" data-i18n="hint_rainfall">Scale: 20 - 350 mm</span>
-                            </label>
-                            <div class="input-container input-with-unit">
-                                <i class="fas fa-cloud-showers-water"></i>
-                                <input type="number" step="0.1" min="0.0" max="500.0" class="form-input" id="input-rainfall" placeholder="202.9" required>
-                                <span class="input-unit">mm</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Submit Button -->
+                            <!-- Submit Button -->
                         <button type="submit" class="btn-primary btn-submit-predict">
                             <i class="fas fa-wand-magic-sparkles"></i>
                             <span data-i18n="btn_predict">Predict Suitable Crop</span>
