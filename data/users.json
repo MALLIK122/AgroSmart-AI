@@ -1,0 +1,26 @@
+[
+  {
+    "username": "admin",
+    "email": "admin@agrosmart.ai",
+    "password_hash": "scrypt:32768:8:1$cSeqpCQPPA0z1Niw$e0c92e757663f5ec564d528f521d1790b6395d073a713da23ff1157fdf34062c2fd4e02b4ff84c8bd01e9e2ca61baffc5c85464c3d8e58f2faa97bdbc834f63f",
+    "role": "admin",
+    "created_at": "2026-05-31T13:15:23.237781",
+    "_id": "file_659822"
+  },
+  {
+    "username": "farmer",
+    "email": "farmer@agrosmart.ai",
+    "password_hash": "scrypt:32768:8:1$obSEpzSZA1g8cs93$5185bab13a2bc32122b3812162d01d9c31d5ed5eee68317f2d040d2cfe2156443cadcd7c1b60e070688457878dedc93d45f3415a2d002ff712d3d299d54e73b1",
+    "role": "farmer",
+    "created_at": "2026-05-31T13:15:23.325080",
+    "_id": "file_772392"
+  },
+  {
+    "username": "testuser_ai",
+    "email": "testuser@example.com",
+    "password_hash": "scrypt:32768:8:1$AZqZAgJiQEVU0cDW$64d7e5db65befa865c304f6861a626420d0c6f95c7a96357378a201aa3013559511f7d1e4608d9f6386bcedd9428f40e85d0fc4fd002f52c2d7a01d68e52c1dd",
+    "role": "farmer",
+    "created_at": "2026-05-31T13:15:23.438599",
+    "_id": "file_785540"
+  }
+]
