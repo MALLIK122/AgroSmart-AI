@@ -3,6 +3,7 @@ import os
 import pickle
 import datetime
 import random
+import json
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -115,6 +116,66 @@ class MockCollection:
                 self.inserted_id = inserted_id
         return Result(doc["_id"])
         
+    def find_one(self, filter=None):
+        if not filter:
+            return self.data[-1] if self.data else None
+        for item in reversed(self.data):
+            match = True
+            for key, value in filter.items():
+                if item.get(key) != value:
+                    match = False
+                    break
+            if match:
+                return item
+        return None
+
+    def count_documents(self, filter=None):
+        if not filter:
+            return len(self.data)
+        return sum(1 for item in self.data if all(item.get(k) == v for k, v in filter.items()))
+
+    def find(self, filter=None, sort=None, limit=0):
+        results = [item for item in self.data if not filter or all(item.get(k) == v for k, v in filter.items())]
+        results = sorted(results, key=lambda x: x.get("timestamp", ""), reverse=True)
+        if limit > 0:
+            results = results[:limit]
+        return results
+
+
+# Lightweight file-backed collection to persist users when MongoDB is unavailable
+class FileBackedCollection:
+    def __init__(self, filepath):
+        self.filepath = filepath
+        self.data = []
+        dirpath = os.path.dirname(filepath)
+        if dirpath and not os.path.exists(dirpath):
+            os.makedirs(dirpath, exist_ok=True)
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    self.data = json.load(f)
+            except Exception:
+                self.data = []
+
+    def _save(self):
+        try:
+            with open(self.filepath, 'w', encoding='utf-8') as f:
+                json.dump(self.data, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+
+    def insert_one(self, doc):
+        if "_id" not in doc:
+            doc["_id"] = f"file_{random.randint(100000, 999999)}"
+        if isinstance(doc.get("timestamp"), datetime.datetime):
+            doc["timestamp"] = doc["timestamp"].isoformat()
+        self.data.append(doc)
+        self._save()
+        class Result:
+            def __init__(self, inserted_id):
+                self.inserted_id = inserted_id
+        return Result(doc["_id"])
+
     def find_one(self, filter=None):
         if not filter:
             return self.data[-1] if self.data else None
@@ -410,7 +471,8 @@ crop_advisory = {
 
 if not mongo_available:
     predictions_col = MockCollection(seed_demo_history=True)
-    users_col = MockCollection()
+    # Persist users to disk so created accounts survive restarts when MongoDB is not configured
+    users_col = FileBackedCollection(os.path.join(BASE_DIR, 'data', 'users.json'))
 
 
 def _seed_default_users():
